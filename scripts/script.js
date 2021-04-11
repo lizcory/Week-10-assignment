@@ -8,7 +8,7 @@ svg.attr('width', size.w)
 
 const containerG = svg.append('g')
     .classed('container', true)
-    .attr('transform', `translate(${margin.t}, ${margin.l})`);
+    .attr('transform', `translate(${size.w/2}, ${size.h/2})`);
 
 size.w = size.w - margin.l - margin.r;
 size.h = size.h - margin.t - margin.b;
@@ -26,8 +26,43 @@ d3.csv('data/Pokemon_subset.csv', function(d) {
     d.spAtk = +d.spAtk;
     d.spDef = +d.spDef;
     d.speed = +d.speed;
+
+
+
+    // d.arr = [
+    //     {key: 'hp', value: d.hp},
+    //     {key: 'attack', value: d.attack},
+    //     {key: 'defense', value: d.defense},
+    //     {key: 'spAtk', value: d.spAtk},
+    //     {key: 'spDef', value: d.spDef},
+    //     {key: 'speed', value: d.speed}
+    // ];
+
+    // let sortedArr = d.arr.sort((a, b) => a.key > b.key);
+    // let comVal = 0;
+    // for (let i in sortedArr) {
+    //     let obj = sortedArr[i];
+    //     obj.prevTotal = comVal;
+
+    //     comVal += obj.value;
+    // }
+    // d.arr = sortedArr;
+
+
+    
+
+
     return d;
 })
 .then(function(data) {
     data = data.sort((a, b) => a.total < b.total);
+
+    // data.forEach((pokemon, index) => {
+        let chart = new RadialAreaChart();
+        chart.data(data)
+            .selection(containerG)
+            .colorScale(colorScale)
+            .size(size.h)
+            .draw();
+    // });
 });
