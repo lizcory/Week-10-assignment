@@ -82,16 +82,15 @@ function RadialAreaChart() {
 
 
        let areaFn = d3.areaRadial()
-            // .curve(d3.curveLinearClosed)
             .angle(d => scaleX(d.name))
             .innerRadius(d => scaleY(this._innerRadius))
             .outerRadius(d => scaleY(d.total));
-
 
         let areaG = this._sel
             .selectAll('g')
             .datum(this._data)
             .join('g')
+        areaG.selectAll('path')
             .append("path")
             .attr("d", areaFn(this._data))
             .attr("fill", "green")

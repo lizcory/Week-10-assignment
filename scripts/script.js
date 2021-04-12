@@ -58,11 +58,38 @@ d3.csv('data/Pokemon_subset.csv', function(d) {
     data = data.sort((a, b) => a.total < b.total);
 
     // data.forEach((pokemon, index) => {
-        let chart = new RadialAreaChart();
-        chart.data(data)
-            .selection(containerG)
-            .colorScale(colorScale)
-            .size(size.h)
-            .draw();
+        // let chart = new RadialAreaChart();
+        // chart.data(data)
+        //     .selection(containerG)
+        //     .colorScale(colorScale)
+        //     .size(size.h)
+        //     .draw();
     // });
+
+    
+
+
 });
+
+
+
+
+
+// function drawArea(data) {
+  
+//     svg.append("path")
+//         .attr("fill", "steelblue")
+//         .attr("fill-opacity", 0.2)
+//         .attr("d", area
+//             .innerRadius(150)
+//             .outerRadius(d => scaleY(d.total))
+//           (data));
+  
+//     svg.append("g")
+//         .call(xAxis);
+  
+//     svg.append("g")
+//         .call(yAxis);
+  
+//     return svg.node();
+// }
