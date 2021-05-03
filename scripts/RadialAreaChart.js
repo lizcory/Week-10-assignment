@@ -49,15 +49,18 @@ function RadialAreaChart() {
             .range([0, 2 * Math.PI])
             .padding(0.1);
 
+        
+        console.log(this._data.map(d => d.name));
+
 
         // Y SCALE //
         let scaleY = d3.scaleLinear()
-            .domain([d3.min(this._data, d => d.total), d3.max(this._data, d => d.total)])
+            .domain([0, d3.max(this._data, d => d.total)])
+            // .domain([d3.min(this._data, d => d.total), d3.max(this._data, d => d.total)])
             .range([this._innerRadius, this._outerRadius]);
 
         
-            console.log(d3.min(this._data, d => d.total));
-            console.log(d3.max(this._data, d => d.total));
+        console.log(d3.min(this._data, d => d.total));
 
 
         //// ARC ////
@@ -87,7 +90,8 @@ function RadialAreaChart() {
 
        let areaFn = d3.areaRadial()
             .angle(d => scaleX(d.name))
-            .innerRadius(scaleY(d3.min(this._data, d => d.total)))
+            .innerRadius(scaleY(0))
+            // .innerRadius(scaleY(d3.min(this._data, d => d.total)))
             .outerRadius(d => scaleY(d.total));
 
 
@@ -96,9 +100,11 @@ function RadialAreaChart() {
         //     .curve(d3.curveLinearClosed)
         //     .angle(d => scaleX(d.name))
 
+        console.log(pathData);
+
         this._sel.append("path")
-            .attr("fill", "steelblue")
-            .attr("fill-opacity", 0.8)
+            .attr("fill", "darkslateblue")
+            .attr("fill-opacity", 0.6)
             .attr("d", pathData);
 
         // let areaG = this._sel
@@ -127,7 +133,7 @@ function RadialAreaChart() {
 
         this._drawAxisX(scaleX);
         this._drawAxisY(scaleY);
-        this._legend();
+        // this._legend();
     }
 
     //// X AXIS ////
@@ -153,6 +159,13 @@ function RadialAreaChart() {
                     .attr('x1', 8)
                     .attr('x2', 10)
                     .attr('stroke', '#000');
+                 // append lines
+                g.selectAll('line')
+                    .data([0])
+                    .join('line')
+                    .attr('x1', 8)
+                    .attr('x2', 200)
+                    .attr('stroke', 'rgba(180,180,180)');
             })
             .call(g => {
                 // append text
