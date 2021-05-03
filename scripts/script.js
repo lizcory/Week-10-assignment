@@ -67,6 +67,12 @@ d3.csv('data/Pokemon_subset.csv', function(d) {
     // });
 
     
+    let chart = new RadialAreaChart();
+        chart.data(data)
+            .selection(containerG)
+            .colorScale(colorScale)
+            .size(size.h)
+            .draw();
 
 
 });
@@ -93,3 +99,5 @@ d3.csv('data/Pokemon_subset.csv', function(d) {
   
 //     return svg.node();
 // }
+
+// drawArea();

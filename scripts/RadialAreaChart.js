@@ -51,9 +51,13 @@ function RadialAreaChart() {
 
 
         // Y SCALE //
-        let scaleY = d3.scaleRadial()
-            .domain([0, d3.max(this._data, d => d.total)])
+        let scaleY = d3.scaleLinear()
+            .domain([d3.min(this._data, d => d.total), d3.max(this._data, d => d.total)])
             .range([this._innerRadius, this._outerRadius]);
+
+        
+            console.log(d3.min(this._data, d => d.total));
+            console.log(d3.max(this._data, d => d.total));
 
 
         //// ARC ////
@@ -83,18 +87,42 @@ function RadialAreaChart() {
 
        let areaFn = d3.areaRadial()
             .angle(d => scaleX(d.name))
-            .innerRadius(d => scaleY(this._innerRadius))
+            .innerRadius(scaleY(d3.min(this._data, d => d.total)))
             .outerRadius(d => scaleY(d.total));
 
-        let areaG = this._sel
-            .selectAll('g')
-            .datum(this._data)
-            .join('g')
-        areaG.selectAll('path')
-            .append("path")
-            .attr("d", areaFn(this._data))
-            .attr("fill", "green")
-            .attr("stroke", "black");        
+
+        pathData = areaFn(this._data);
+        // area = d3.areaRadial()
+        //     .curve(d3.curveLinearClosed)
+        //     .angle(d => scaleX(d.name))
+
+        this._sel.append("path")
+            .attr("fill", "steelblue")
+            .attr("fill-opacity", 0.8)
+            .attr("d", pathData);
+
+        // let areaG = this._sel
+        //     .selectAll('g.areaGroup')
+        //     .data([1]) // magic number!
+        //     .join("g")
+        //     .classed("areaGroup",true)
+        //     .datum(this._data)
+        //     .join('g')
+
+        // areaG.selectAll('path')
+        //     .append("path")
+        //     .attr("d", areaFn(this._data))
+        //     .attr("fill", "green")
+        //     .attr("stroke", "black");        
+// 
+
+        // this._sel.append("path")
+        //     .attr("fill", "steelblue")
+        //     .attr("fill-opacity", 0.2)
+        //     .attr("d", area
+        //         .innerRadius(d => scaleY(d.min))
+        //         .outerRadius(d => scaleY(d.max))
+        //       (this._data));
 
 
         this._drawAxisX(scaleX);
@@ -170,38 +198,38 @@ function RadialAreaChart() {
     }
 
     //// LEGEND ////
-    this._legend = function () {
-        let legendG = this._sel
-            .selectAll('g.legend')
-            .data([0])
-            .join('g')
-            .classed('legend', true);
+    // this._legend = function () {
+    //     let legendG = this._sel
+    //         .selectAll('g.legend')
+    //         .data([0])
+    //         .join('g')
+    //         .classed('legend', true);
         
-        legendG
-            .selectAll('g')
-            .data(colorScale.domain())
-            .join('g')
-            .attr('transform', (_, i) => `translate(0, ${i*30})`)
-            .call(g => {
-                g.append('rect')
-                    .attr('width', 15)
-                    .attr('height', 15)
-                    .attr('fill', d => colorScale(d))
-            })
-            .call(g => {
-                g.append('text')
-                    .attr('x', 20)
-                    .attr('y', 10)
-                    .text(d => d)
-            });
-        legendG
-            .attr('transform', function() {
-                let h = this.getBBox().height;
-                let w = this.getBBox().width;
+    //     legendG
+    //         .selectAll('g')
+    //         .data(colorScale.domain())
+    //         .join('g')
+    //         .attr('transform', (_, i) => `translate(0, ${i*30})`)
+    //         .call(g => {
+    //             g.append('rect')
+    //                 .attr('width', 15)
+    //                 .attr('height', 15)
+    //                 .attr('fill', d => colorScale(d))
+    //         })
+    //         .call(g => {
+    //             g.append('text')
+    //                 .attr('x', 20)
+    //                 .attr('y', 10)
+    //                 .text(d => d)
+    //         });
+    //     legendG
+    //         .attr('transform', function() {
+    //             let h = this.getBBox().height;
+    //             let w = this.getBBox().width;
 
-                return `translate(${-w/2}, ${-h/2})`;
-            })
-    }
-
+    //             return `translate(${-w/2}, ${-h/2})`;
+    //         })
+    // }
+// 
     return this;
 }
